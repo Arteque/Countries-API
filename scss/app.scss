@@ -128,7 +128,7 @@ html,body,select, input, option{
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows:0.2fr 1.5fr 0.2fr;
                 gap: 10px;
-                h2{
+                .full-width{
                     grid-column:1 / span 2; 
                     align-self: center;
                     margin-block-end:unset;
@@ -141,15 +141,27 @@ html,body,select, input, option{
     }
 }
 
-button{
-    border:none;
-    background-color: var(--element);
-    display: block;
+.bordered{
+    display: inline-block;
     padding: 6px 2rem;
     border-radius: 3px;
     color:var(--clr);
     cursor:pointer;
-    box-shadow: 0 0 10px 5px #00000050;
+    background-color: var(--element);
+    border: unset;
+    // box-shadow: 0 0 10px 5px #00000050;
+}
+.flex{
+    display:flex;
+}
+.wrap{
+    flex-wrap: wrap;
+}
+.row{
+    flex-direction: row;
+}
+.gap{
+    gap:1rem;
 }
 //darkmode
 .color-mode-container{

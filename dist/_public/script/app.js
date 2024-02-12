@@ -4,6 +4,7 @@ const countriesArr = []
 const searchInput = document.querySelector(".search-container input")
 const filterCountries = document.querySelector("#filter-countries select")
 const cardContainerParent = document.querySelector("section#main-data")
+const baseUrl = window.location.origin+window.location.pathname
 
 fetch("./_public/script/Assets/data.json")
 .then(data => data.json())
@@ -60,7 +61,7 @@ fetch("./_public/script/Assets/data.json")
 .then(() => {
     //details page
 const cardsDOM = [...document.querySelectorAll(".card-container")]
-const baseUrl = window.location.origin+window.location.pathname
+
     cardsDOM.forEach((card, index) => {
         card.addEventListener("click", () => {
             console.log(window)
@@ -110,27 +111,33 @@ function singleTemplate(country){
         </div>
     `
 }
-
-function secondLvlArrayDataExtractor(index){
-    // if(!countriesArr[index].bordercountries) return 
-    const countries = countriesArr[index].bordercountries
-    countries.forEach(country => {
-        countriesArr.forEach(item => {
-            if(item.alphaCode == country){
-                // console.log(country, item.name)
-                // dataArr.push({"name":item.name})     
-
+let dataArr = []
+function getCountriesBorderFullName(elements){
+    elements.forEach(border => {
+        countriesArr.forEach(element => {
+            if(element.alphaCode == border){
+                console.log(typeof(element.name), border)
+                dataArr.push({"name":element.name, "index": element.index}) 
             }
         })
     })
 }
-
+function bordersTemplate(el){
+    return `<span class="bordered" data-index="${el.index}" onclick="changeIndex(${el.index})">${el.name}</span>`
+}
+function changeIndex(index){
+    window.location.href = baseUrl+"?country="+index
+}
+function backToHome(){
+    window.location.href=baseUrl
+}
 function detailsTemplate(country){
-    secondLvlArrayDataExtractor(country.index)
+    getCountriesBorderFullName(country.bordercountries)
+    
     return `
         <section id="details-section" data-name="${country.name}" data-index="${country.index}">
             <header class="back-container">
-                <button>
+                <button class="bordered" onclick="backToHome()">
                     <span class="icon">
                         <i class="fa-solid fa-arrow-left"></i>
                     </span>
@@ -144,7 +151,7 @@ function detailsTemplate(country){
                     <img src="${country.flag}" alt="${country.name}">
                 </div>
                 <div class="card-body">
-                    <h2>${country.name}</h2>
+                    <h2 class="full-width">${country.name}</h2>
                     <ul>
                         <li>
                             <b>Native Name:</b> ${country.nativeName}
@@ -174,9 +181,9 @@ function detailsTemplate(country){
                         </li>
                     </ul>
 
-                    <ul>
-                        <li> 
-                            <b>Border Countries:</b> ${country.bordercountries.join(" ")}
+                    <ul class="full-width">
+                        <li class="flex row wrap gap"> 
+                            <b>Border Countries:</b>${dataArr.map(bordersTemplate).join(" ")}
                         </li>
                     </ul>
                 </div>

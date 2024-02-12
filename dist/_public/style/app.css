@@ -120,7 +120,7 @@ html, body, select, input, option {
     grid-template-rows: 0.2fr 1.5fr 0.2fr;
     gap: 10px;
   }
-  .card-container.details .card-body h2 {
+  .card-container.details .card-body .full-width {
     grid-column: 1/span 2;
     align-self: center;
     -webkit-margin-after: unset;
@@ -132,16 +132,36 @@ html, body, select, input, option {
   }
 }
 
-button {
-  border: none;
-  background-color: var(--element);
-  display: block;
+.bordered {
+  display: inline-block;
   padding: 6px 2rem;
   border-radius: 3px;
   color: var(--clr);
   cursor: pointer;
-  -webkit-box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3137254902);
-          box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3137254902);
+  background-color: var(--element);
+  border: unset;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.wrap {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.gap {
+  gap: 1rem;
 }
 
 .color-mode-container button .text, .color-mode-container button .icon {
