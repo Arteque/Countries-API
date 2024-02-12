@@ -2,10 +2,15 @@ body {
   background-color: var(--main);
 }
 body.darkmode {
-  --main:hsl(207, 26%, 17%);
+  --darker:hsl(205, 26%, 16%);
+  --main:hsl(205, 26%, 17%);
   --element:hsl(209, 23%, 22%);
   --input:hsl(0, 0%, 64%);
   --clr:hsl(0, 0%, 100%);
+}
+body.darkmode .card-container:not(.details), body.darkmode .bordered, body.darkmode input, body.darkmode select {
+  -webkit-box-shadow: 0 0 0 5px var(--darker);
+          box-shadow: 0 0 0 5px var(--darker);
 }
 body:not(.darkmode) {
   --main: hsl(0, 0%, 93%);
@@ -34,6 +39,126 @@ html, body, select, input, option {
   color: var(--clr);
 }
 
+.loader-container {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background-color: var(--main);
+  color: var(--clr);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: all var(--transition);
+  transition: all var(--transition);
+}
+.loader-container .loader {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 5px solid var(--clr);
+  position: relative;
+  margin-inline: auto;
+}
+.loader-container .loader::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%) rotate(0);
+          transform: translate(-50%, -50%) rotate(0);
+  width: 0;
+  height: 0;
+  border: 21px solid var(--main);
+  border-radius: 50%;
+  z-index: 10;
+  border-block-color: transparent;
+  -webkit-animation: loopLoader 2s linear infinite;
+          animation: loopLoader 2s linear infinite;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+}
+.loader-container h3 span {
+  position: relative;
+  -webkit-animation: showDots 5s linear infinite;
+          animation: showDots 5s linear infinite;
+}
+.loader-container h3 span:nth-of-type(2) {
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+.loader-container h3 span:nth-of-type(3) {
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+.loader-container.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@-webkit-keyframes showDots {
+  0% {
+    top: -20px;
+    opacity: 0;
+  }
+  20% {
+    top: 0px;
+    opacity: 1;
+  }
+  80% {
+    top: 0px;
+    opacity: 1;
+  }
+  100% {
+    top: 20px;
+    opacity: 0;
+  }
+}
+
+@keyframes showDots {
+  0% {
+    top: -20px;
+    opacity: 0;
+  }
+  20% {
+    top: 0px;
+    opacity: 1;
+  }
+  80% {
+    top: 0px;
+    opacity: 1;
+  }
+  100% {
+    top: 20px;
+    opacity: 0;
+  }
+}
+@-webkit-keyframes loopLoader {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0);
+            transform: translate(-50%, -50%) rotate(0);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(365deg);
+            transform: translate(-50%, -50%) rotate(365deg);
+  }
+}
+@keyframes loopLoader {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0);
+            transform: translate(-50%, -50%) rotate(0);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(365deg);
+            transform: translate(-50%, -50%) rotate(365deg);
+  }
+}
 .no-disp {
   display: none !important;
 }
@@ -140,6 +265,14 @@ html, body, select, input, option {
   cursor: pointer;
   background-color: var(--element);
   border: unset;
+  -webkit-transition: var(--transition);
+  transition: var(--transition);
+}
+.bordered:hover {
+  -webkit-box-shadow: 0 0 10px px rgba(0, 0, 0, 0.062745098), 0 0 20px 0px rgba(0, 0, 0, 0.1254901961);
+          box-shadow: 0 0 10px px rgba(0, 0, 0, 0.062745098), 0 0 20px 0px rgba(0, 0, 0, 0.1254901961);
+  -webkit-filter: saturate(2);
+          filter: saturate(2);
 }
 
 .flex {
@@ -213,7 +346,7 @@ html, body, select, input, option {
   cursor: pointer;
 }
 
-article form {
+article form:not(#filter-countries) {
   width: 100%;
   -webkit-box-shadow: var(--shadow);
           box-shadow: var(--shadow);
@@ -302,7 +435,7 @@ article header select {
   background-color: var(--element);
   color: var(--clr);
   font-family: inherit;
-  cursor: inherit;
+  cursor: pointer;
   font-size: inherit;
   line-height: inherit;
   min-height: 4rem;

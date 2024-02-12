@@ -9,7 +9,6 @@ const baseUrl = window.location.origin+window.location.pathname
 fetch("./_public/script/Assets/data.json")
 .then(data => data.json())
 .then(data => {
-    console.log(data)
     data.forEach((country,index) => {
         countriesArr.push({
             "index": index,
@@ -64,7 +63,6 @@ const cardsDOM = [...document.querySelectorAll(".card-container")]
 
     cardsDOM.forEach((card, index) => {
         card.addEventListener("click", () => {
-            console.log(window)
             window.location.href = baseUrl + "?country=" + index
         })
     })
@@ -113,10 +111,11 @@ function singleTemplate(country){
 }
 let dataArr = []
 function getCountriesBorderFullName(elements){
+    
+    if(!elements) return
     elements.forEach(border => {
         countriesArr.forEach(element => {
             if(element.alphaCode == border){
-                console.log(typeof(element.name), border)
                 dataArr.push({"name":element.name, "index": element.index}) 
             }
         })
@@ -125,15 +124,22 @@ function getCountriesBorderFullName(elements){
 function bordersTemplate(el){
     return `<span class="bordered" data-index="${el.index}" onclick="changeIndex(${el.index})">${el.name}</span>`
 }
+
 function changeIndex(index){
     window.location.href = baseUrl+"?country="+index
 }
+
 function backToHome(){
     window.location.href=baseUrl
 }
+
+function getCountryLangues(language){
+    return `<span>${language.name}</span>`
+}
+
 function detailsTemplate(country){
     getCountriesBorderFullName(country.bordercountries)
-    
+    console.log(country)
     return `
         <section id="details-section" data-name="${country.name}" data-index="${country.index}">
             <header class="back-container">
@@ -154,7 +160,7 @@ function detailsTemplate(country){
                     <h2 class="full-width">${country.name}</h2>
                     <ul>
                         <li>
-                            <b>Native Name:</b> ${country.nativeName}
+                            <b>Native Name:</b> ${country.nativename}
                         </li>
                         <li>
                             <b>Population:</b> ${new Intl.NumberFormat("de-DE").format(country.population)}
@@ -174,10 +180,10 @@ function detailsTemplate(country){
                             <b>Top Level Domain:</b> ${country.topleveldomain}
                         </li>
                         <li>
-                            <b>Currencies:</b> ${country.currencies}
+                            <b>Currencies:</b> ${country.currencies[0].name} | ${country.currencies[0].symbol}
                         </li>
                         <li>
-                            <b>Languages:</b> ${country.languages}
+                            <b>Languages:</b> ${country.languages.map(getCountryLangues).join(", ")}
                         </li>
                     </ul>
 

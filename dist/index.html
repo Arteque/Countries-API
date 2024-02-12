@@ -12,6 +12,12 @@
     <title>Countries</title>
 </head>
 <body>
+    <div class="loader-container">
+        <div class="content">
+            <span class="loader"></span>
+            <h3>Download <span>.</span><span>.</span><span>.</span></h3>
+        </div>
+    </div>
     <!--Main title-->
     <h1 class="no-disp">
         REST Countries API with color theme switcher
@@ -70,23 +76,10 @@
 
                 <!--Section-->
                 <section id="main-data" data-region="0">
-                    <div class="card-container">
-                        <div class="card-header">
-                            <img src="" alt="">
-                        </div>
-                        <div class="card-body">
-                            <h3>Germany</h3>
-                            <ul>
-                                <li>
-                                    <b>Population:</b> 81.770.900
-                                </li>
-                                <li>
-                                    <b>Region:</b> Europ
-                                </li>
-                                <li>
-                                    <b>Capital:</b> Berlin
-                                </li>
-                            </ul>
+                    <div class="loader-container">
+                        <div class="content">
+                            <span class="loader"></span>
+                            <h3>Download <span>.</span><span>.</span><span>.</span></h3>
                         </div>
                     </div>
                 </section>
@@ -95,20 +88,73 @@
     </main>
     <script async src="./_public/script/app.js"></script>
     <script>
-       const clrModeBtn = document.querySelector(".color-mode-container .color-mode-btn")
-       const clrModeBtnTxt = clrModeBtn.querySelectorAll(".text")
-       const clrModeBtnIcon = clrModeBtn.querySelectorAll(".icon")
-       clrModeBtn.addEventListener("click", (e) => {
+        const loaderContainer = document.querySelector(".loader-container")
+        
+        document.onreadystatechange = () => {
+            if(document.readyState == "complete"){
+                loaderContainer.classList.add("hide")
+            }
+        }
+        
+        const clrModeBtn = document.querySelector(".color-mode-container .color-mode-btn")
+        const clrModeBtnTxt = clrModeBtn.querySelectorAll(".text")
+        const clrModeBtnIcon = clrModeBtn.querySelectorAll(".icon")
+
+        // darkmode check    
+        toggleClrMode(checkifDarkmodeExist())
+
+        // Toggle Darkmode on Click
+        clrModeBtn.addEventListener("click", (e) => {
         e.preventDefault()
-        clrModeBtnTxt.forEach(item => {
-            item.classList.toggle("current")
-        })
-        clrModeBtnIcon.forEach(item => {
-            item.classList.toggle("current")
-        })
-        document.body.classList.toggle("darkmode")
+        
+        if(document.body.classList.value.includes("darkmode")){
+            removeDarkmodeCookie()
+            toggleClrMode(true)
+        }else{
+            document.body.classList.add("darkmode")
+            setDarkmodeasCookie()
+        }
+       
+  
        })
 
+       
+       // check if Darkmode is set in cookies
+       function checkifDarkmodeExist(){
+            let c = document.cookie
+            if(!c.includes("darkmode")) return
+            return true
+       }
+       // Store Darkmode as cookie
+       function setDarkmodeasCookie(){
+        let d = new Date()
+        d.setTime(d.getTime() + (366*24*60*60*1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = "darkmode = true;"+expires+";path=/";
+    }
+
+       // Remove Darkmode cookie
+       function removeDarkmodeCookie(){
+        let d = new Date()
+        d.setTime(d.getTime() - (366*24*60*60*1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = "darkmode = true;"+expires+";path=/";
+       }
+
+       function toggleClrMode(check){
+            if(!check) return
+        
+            document.body.classList.toggle("darkmode")
+        
+            clrModeBtnTxt.forEach(item => {
+            item.classList.toggle("current")
+            })
+        
+            clrModeBtnIcon.forEach(item => {
+                item.classList.toggle("current")
+            })
+       }
+       
     </script>
 </body>
 </html>
