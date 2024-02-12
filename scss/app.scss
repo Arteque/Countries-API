@@ -21,6 +21,10 @@ $lightclrs:(
     //(Light Mode Text)
     clr: hsl(200, 15%, 8%),
 );
+//mixin
+@mixin m{
+    @media screen and (min-width: 900px){@content;}
+};
 body{
     &.darkmode{
         @each $clr , $vl in $darkclrs{
@@ -46,13 +50,15 @@ body{
     --radius: 10px;
 }
 
-html,body{
+html,body,select, input, option{
     font-family:var(--sans);
     font-size:14px;
+    font-weight:800;
+    color: var(--clr);
 }
 //Global
 .no-disp{
-    display:none;
+    display:none !important;
 }
 .wrapper{
     max-width: 1440px;
@@ -60,13 +66,27 @@ html,body{
     margin-inline:auto;
 }
 .card-container{
-    background-color: var(--element);
-    margin-block:2rem;
-    border-radius:var(--radius);
-    overflow: hidden;
-    max-width:300px;
+    &:not(.details){
+        background-color: var(--element);
+        max-width:300px;
+        border-radius:var(--radius);
+        cursor: pointer;
+        &:hover{
+            box-shadow: 0 0 0px 10px #00000010, 0 0 20px 0px #00000050;
+            filter: saturate(2);
+            scale:1.01;
+        }
+    }
+    &.details{
+        .card-body{
+            padding:3rem 0rem;
+        }
+    }
+    margin-block:2rem;    
+    overflow: hidden; 
     color: var(--clr);
     transition:all 0.5s;
+    transition: var(--transition);
     .card-header{
         aspect-ratio: 4 / 2;
         img{
@@ -78,8 +98,8 @@ html,body{
     }
     .card-body{
         padding: 2rem 2rem 3rem 2rem;
-        h3{
-            margin-block-end:2rem;
+        h2,h3{
+            margin-block-end:1rem;
             font-weight:800;
         }
     }
@@ -90,6 +110,46 @@ html,body{
             font-weight: 300;
         }
     }
+    @include m{
+        &.details{
+            display:flex;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            .card-header{
+                max-width:45%;
+                aspect-ratio: unset;
+                max-height: 400px;
+            }
+            .card-body{
+                padding: 0;
+                width: 50%;
+                display:grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows:0.2fr 1.5fr 0.2fr;
+                gap: 10px;
+                h2{
+                    grid-column:1 / span 2; 
+                    align-self: center;
+                    margin-block-end:unset;
+                }
+                ul{
+                    margin-block-end:2rem;
+                }
+            }
+        }
+    }
+}
+
+button{
+    border:none;
+    background-color: var(--element);
+    display: block;
+    padding: 6px 2rem;
+    border-radius: 3px;
+    color:var(--clr);
+    cursor:pointer;
+    box-shadow: 0 0 10px 5px #00000050;
 }
 //darkmode
 .color-mode-container{
@@ -139,7 +199,24 @@ article{
     }
     header{
         margin-block:2rem;
-    
+        display:flex;
+        gap:2rem;
+        flex-flow: row wrap;
+        @include m{
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            width: 100%;
+            #search-form{
+                width: 45%;
+            }
+            #filter-countries{
+                width: fit-content;
+                min-width:25%;
+                select{
+                    min-width: 100%;
+                }
+            }
+        }
             .search-container{
                 position:relative;
                 label{
@@ -168,34 +245,56 @@ article{
                     }
                 }
             }
+            select{
+                appearance: none;
+                background-color:var(--element);
+                color: var(--clr);
+                font-family:inherit;
+                cursor: inherit;
+                font-size: inherit;
+                line-height:inherit;
+                min-height:4rem;
+                display:block;
+                min-width:50%;
+                border-radius:var(--radius);
+                border:transparent;
+                padding-inline: 2rem;
+                outline:none;
+                option{
+                    border:none;
+                    border-radius: 10px;
+                }
+            }
+            #filter-countries{
+                position:relative;
+                &::after{
+                    --width:6px;
+                    content:"";
+                    width:0;
+                    height:0;
+                    position:absolute;
+                    top:calc(50% + var(--width));
+                    right:1rem;
+                    transform:translateY(-50%);
+                    border: var(--width) solid var(--clr);
+                    border-inline-color: transparent;
+                    border-block-end-color: transparent;
+                }
+             }
     }
-    select{
-        appearance: none;
-        background-color:var(--element);
-        color: var(--clr);
-        font-family:inherit;
-        cursor: inherit;
-        font-size: inherit;
-        line-height:inherit;
-        min-height:4rem;
-        display:block;
-        min-width:50%;
-        border-radius:var(--radius);
-        border:transparent;
-        padding-inline: 2rem;
-        outline:none;
-        position: sticky;
-        display: block;
-        top: 0;
-    }
-    select::-ms-expand {
-        display: none;
-      }
-      section{
+    section{
         padding-inline:2rem;
-        display: flex;
-        flex-flow: row wrap;
-        gap: 3REM;
-        justify-content: center;
+        .card-container{
+            margin-inline:auto;
+        }
+        @include m{
+            &:not(#details-section){
+                padding-inline:0;
+                display:grid;
+                grid-template-columns: repeat(4,1fr);
+                gap:5rem;
+            }
+        }
     }
+  
 }
