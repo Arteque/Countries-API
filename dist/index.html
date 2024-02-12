@@ -76,18 +76,14 @@
 
                 <!--Section-->
                 <section id="main-data" data-region="0">
-                    <div class="loader-container">
-                        <div class="content">
-                            <span class="loader"></span>
-                            <h3>Download <span>.</span><span>.</span><span>.</span></h3>
-                        </div>
-                    </div>
+                    <!--JS Inject Data-->
                 </section>
             </div>
         </article>
     </main>
     <script async src="./_public/script/app.js"></script>
     <script>
+        //Loader
         const loaderContainer = document.querySelector(".loader-container")
         
         document.onreadystatechange = () => {
@@ -99,23 +95,37 @@
         const clrModeBtn = document.querySelector(".color-mode-container .color-mode-btn")
         const clrModeBtnTxt = clrModeBtn.querySelectorAll(".text")
         const clrModeBtnIcon = clrModeBtn.querySelectorAll(".icon")
-
+        const body = document.body
         // darkmode check    
-        toggleClrMode(checkifDarkmodeExist())
+        if(checkifDarkmodeExist()){
+            body.classList.add("darkmode")
+        }
 
         // Toggle Darkmode on Click
         clrModeBtn.addEventListener("click", (e) => {
         e.preventDefault()
         
-        if(document.body.classList.value.includes("darkmode")){
-            removeDarkmodeCookie()
-            toggleClrMode(true)
+        clrModeBtnTxt.forEach(item => {
+            item.classList.toggle("current")
+        })
+        
+        clrModeBtnIcon.forEach(item => {
+            item.classList.toggle("current")
+        })
+        body.classList.toggle("darkmode")
+
+        const bodyClass = body.classList.value
+
+        if(bodyClass == "darkmode"){
+            if(!checkifDarkmodeExist()){
+                setDarkmodeasCookie()
+            }
         }else{
-            document.body.classList.add("darkmode")
-            setDarkmodeasCookie()
+            if(checkifDarkmodeExist()){
+                removeDarkmodeCookie()
+            }
         }
-       
-  
+
        })
 
        
@@ -143,9 +153,11 @@
 
        function toggleClrMode(check){
             if(!check) return
-        
+       }
+
+       function toggleClasses(){
             document.body.classList.toggle("darkmode")
-        
+            
             clrModeBtnTxt.forEach(item => {
             item.classList.toggle("current")
             })
