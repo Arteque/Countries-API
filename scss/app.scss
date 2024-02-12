@@ -139,6 +139,7 @@ article{
     }
     header{
         margin-block:2rem;
+    
             .search-container{
                 position:relative;
                 label{
@@ -183,6 +184,9 @@ article{
         border:transparent;
         padding-inline: 2rem;
         outline:none;
+        position: sticky;
+        display: block;
+        top: 0;
     }
     select::-ms-expand {
         display: none;
@@ -191,7 +195,7 @@ article{
         padding-inline:2rem;
         display: flex;
         flex-flow: row wrap;
-        gap: calc(100% / 10);
+        gap: 3REM;
         justify-content: center;
     }
 }
