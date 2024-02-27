@@ -9,6 +9,7 @@ const baseUrl = window.location.origin+window.location.pathname
 fetch("./_public/script/Assets/data.json")
 .then(data => data.json())
 .then(data => {
+    //Pushing the needed data to countriesArr array
     data.forEach((country,index) => {
         countriesArr.push({
             "index": index,
@@ -29,13 +30,11 @@ fetch("./_public/script/Assets/data.json")
 })
 .then(() => {
    
-    
+    // injecting the data to the dom
     cardContainerParent.innerHTML = countriesArr.map(singleTemplate).join("")
 
 
-    //Filter
-   
-
+    //Filter Function 
     filterCountries.addEventListener("input", (e) => {
         const filterIndex = Number( e.target.selectedIndex)
         const region = String(e.target[filterIndex].value)
@@ -58,7 +57,7 @@ fetch("./_public/script/Assets/data.json")
     })
 })
 .then(() => {
-    //details page
+    //details page is generated using ?country= + index and showing the data
 const cardsDOM = [...document.querySelectorAll(".card-container")]
 
     cardsDOM.forEach((card, index) => {
@@ -85,7 +84,7 @@ function analyseWindowLocation(){
 
 }
 
-
+//All the function used Templates for the cards
 function singleTemplate(country){
     return `
         <div class="card-container" data-filter="${country.region.toLowerCase()}" data-index="${country.alphaCode}" data-name="${country.name.toLowerCase().trim()}">
@@ -109,6 +108,8 @@ function singleTemplate(country){
         </div>
     `
 }
+
+
 let dataArr = []
 function getCountriesBorderFullName(elements){
     
@@ -121,6 +122,7 @@ function getCountriesBorderFullName(elements){
         })
     })
 }
+
 function bordersTemplate(el){
     return `<span class="bordered" data-index="${el.index}" onclick="changeIndex(${el.index})">${el.name}</span>`
 }
@@ -183,12 +185,14 @@ function detailsTemplate(country){
                             <b>Currencies:</b> ${country.currencies[0].name} | ${country.currencies[0].symbol}
                         </li>
                         <li>
+                        
                             <b>Languages:</b> ${country.languages.map(getCountryLangues).join(", ")}
                         </li>
                     </ul>
 
                     <ul class="full-width">
                         <li class="flex row wrap gap"> 
+                        <!--Countries Names will be generated-->
                             <b>Border Countries:</b>${dataArr.map(bordersTemplate).join(" ")}
                         </li>
                     </ul>
